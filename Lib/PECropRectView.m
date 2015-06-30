@@ -161,7 +161,10 @@
         CGFloat height = CGRectGetHeight(self.bounds);
         self.fixedAspectRatio = fminf(width / height, height / width);
     }
+    //锁定宽高比3:2
+    self.fixedAspectRatio=3.0/2.0;
 }
+
 
 #pragma mark -
 
@@ -194,7 +197,7 @@
 {
     CGRect rect = self.frame;
     
-    if (resizeControlView == self.topEdgeView) {
+    if (resizeControlView == self.topEdgeView) {//上边
         rect = CGRectMake(CGRectGetMinX(self.initialRect),
                           CGRectGetMinY(self.initialRect) + resizeControlView.translation.y,
                           CGRectGetWidth(self.initialRect),
@@ -203,7 +206,7 @@
         if (self.keepingAspectRatio) {
             rect = [self constrainedRectWithRectBasisOfHeight:rect aspectRatio:self.fixedAspectRatio];
         }
-    } else if (resizeControlView == self.leftEdgeView) {
+    } else if (resizeControlView == self.leftEdgeView) {//左边
         rect = CGRectMake(CGRectGetMinX(self.initialRect) + resizeControlView.translation.x,
                           CGRectGetMinY(self.initialRect),
                           CGRectGetWidth(self.initialRect) - resizeControlView.translation.x,
@@ -212,7 +215,7 @@
         if (self.keepingAspectRatio) {
             rect = [self constrainedRectWithRectBasisOfWidth:rect aspectRatio:self.fixedAspectRatio];
         }
-    } else if (resizeControlView == self.bottomEdgeView) {
+    } else if (resizeControlView == self.bottomEdgeView) {//下边
         rect = CGRectMake(CGRectGetMinX(self.initialRect),
                           CGRectGetMinY(self.initialRect),
                           CGRectGetWidth(self.initialRect),
@@ -221,7 +224,7 @@
         if (self.keepingAspectRatio) {
             rect = [self constrainedRectWithRectBasisOfHeight:rect aspectRatio:self.fixedAspectRatio];
         }
-    } else if (resizeControlView == self.rightEdgeView) {
+    } else if (resizeControlView == self.rightEdgeView) {//右边
         rect = CGRectMake(CGRectGetMinX(self.initialRect),
                           CGRectGetMinY(self.initialRect),
                           CGRectGetWidth(self.initialRect) + resizeControlView.translation.x,
@@ -230,7 +233,7 @@
         if (self.keepingAspectRatio) {
             rect = [self constrainedRectWithRectBasisOfWidth:rect aspectRatio:self.fixedAspectRatio];
         }
-    } else if (resizeControlView == self.topLeftCornerView) {
+    } else if (resizeControlView == self.topLeftCornerView) {//左上角
         rect = CGRectMake(CGRectGetMinX(self.initialRect) + resizeControlView.translation.x,
                           CGRectGetMinY(self.initialRect) + resizeControlView.translation.y,
                           CGRectGetWidth(self.initialRect) - resizeControlView.translation.x,
@@ -238,7 +241,7 @@
         
         if (self.keepingAspectRatio) {
             CGRect constrainedRect;
-            if (fabsf(resizeControlView.translation.x) < fabsf(resizeControlView.translation.y)) {
+            if (fabs(resizeControlView.translation.x) < fabs(resizeControlView.translation.y)) {
                 constrainedRect = [self constrainedRectWithRectBasisOfHeight:rect aspectRatio:self.fixedAspectRatio];
             } else {
                 constrainedRect = [self constrainedRectWithRectBasisOfWidth:rect aspectRatio:self.fixedAspectRatio];
@@ -247,20 +250,20 @@
             constrainedRect.origin.y -= CGRectGetHeight(constrainedRect) - CGRectGetHeight(rect);
             rect = constrainedRect;
         }
-    } else if (resizeControlView == self.topRightCornerView) {
+    } else if (resizeControlView == self.topRightCornerView) {//右上角
         rect = CGRectMake(CGRectGetMinX(self.initialRect),
                           CGRectGetMinY(self.initialRect) + resizeControlView.translation.y,
                           CGRectGetWidth(self.initialRect) + resizeControlView.translation.x,
                           CGRectGetHeight(self.initialRect) - resizeControlView.translation.y);
         
         if (self.keepingAspectRatio) {
-            if (fabsf(resizeControlView.translation.x) < fabsf(resizeControlView.translation.y)) {
+            if (fabs(resizeControlView.translation.x) < fabs(resizeControlView.translation.y)) {
                 rect = [self constrainedRectWithRectBasisOfHeight:rect aspectRatio:self.fixedAspectRatio];
             } else {
                 rect = [self constrainedRectWithRectBasisOfWidth:rect aspectRatio:self.fixedAspectRatio];
             }
         }
-    } else if (resizeControlView == self.bottomLeftCornerView) {
+    } else if (resizeControlView == self.bottomLeftCornerView) {//左下角
         rect = CGRectMake(CGRectGetMinX(self.initialRect) + resizeControlView.translation.x,
                           CGRectGetMinY(self.initialRect),
                           CGRectGetWidth(self.initialRect) - resizeControlView.translation.x,
@@ -268,7 +271,7 @@
         
         if (self.keepingAspectRatio) {
             CGRect constrainedRect;
-            if (fabsf(resizeControlView.translation.x) < fabsf(resizeControlView.translation.y)) {
+            if (fabs(resizeControlView.translation.x) < fabs(resizeControlView.translation.y)) {
                 constrainedRect = [self constrainedRectWithRectBasisOfHeight:rect aspectRatio:self.fixedAspectRatio];
             } else {
                 constrainedRect = [self constrainedRectWithRectBasisOfWidth:rect aspectRatio:self.fixedAspectRatio];
@@ -276,73 +279,82 @@
             constrainedRect.origin.x -= CGRectGetWidth(constrainedRect) - CGRectGetWidth(rect);
             rect = constrainedRect;
         }
-    } else if (resizeControlView == self.bottomRightCornerView) {
+    } else if (resizeControlView == self.bottomRightCornerView) {//右下角
         rect = CGRectMake(CGRectGetMinX(self.initialRect),
                           CGRectGetMinY(self.initialRect),
                           CGRectGetWidth(self.initialRect) + resizeControlView.translation.x,
                           CGRectGetHeight(self.initialRect) + resizeControlView.translation.y);
         
         if (self.keepingAspectRatio) {
-            if (fabsf(resizeControlView.translation.x) < fabsf(resizeControlView.translation.y)) {
+            if (fabs(resizeControlView.translation.x) < fabs(resizeControlView.translation.y)) {
                 rect = [self constrainedRectWithRectBasisOfHeight:rect aspectRatio:self.fixedAspectRatio];
             } else {
                 rect = [self constrainedRectWithRectBasisOfWidth:rect aspectRatio:self.fixedAspectRatio];
             }
         }
     }
-
-    CGFloat minWidth = CGRectGetWidth(self.leftEdgeView.bounds) + CGRectGetWidth(self.rightEdgeView.bounds);
-    if (CGRectGetWidth(rect) < minWidth) {
-        rect.origin.x = CGRectGetMaxX(self.frame) - minWidth;
-        rect.size.width = minWidth;
-    }
-
-    CGFloat minHeight = CGRectGetHeight(self.topEdgeView.bounds) + CGRectGetHeight(self.bottomEdgeView.bounds);
-    if (CGRectGetHeight(rect) < minHeight) {
-        rect.origin.y = CGRectGetMaxY(self.frame) - minHeight;
-        rect.size.height = minHeight;
-    }
-
-    if (self.fixedAspectRatio) {
-        CGRect constrainedRect = rect;
-
-        if (CGRectGetWidth(rect) < minWidth) {
-            constrainedRect.size.width = rect.size.height * (minWidth / rect.size.width);
-        }
-
-        if (CGRectGetHeight(rect) < minHeight) {
-            constrainedRect.size.height = rect.size.width * (minHeight / rect.size.height);
-        }
-
-        rect = constrainedRect;
+    
+    //截图框有个最小的宽高，你不能让控制点都压缩没了呀。
+    //    CGFloat minWidth = CGRectGetWidth(self.leftEdgeView.bounds) + CGRectGetWidth(self.rightEdgeView.bounds);//获取最小宽度
+    //    if (CGRectGetWidth(rect) < minWidth) {
+    //        rect.origin.x = CGRectGetMaxX(self.frame) - minWidth;
+    //        rect.size.width = minWidth;
+    //    }
+    //
+    //    CGFloat minHeight = CGRectGetHeight(self.topEdgeView.bounds) + CGRectGetHeight(self.bottomEdgeView.bounds);//获取最小高度
+    //    if (CGRectGetHeight(rect) < minHeight) {
+    //        rect.origin.y = CGRectGetMaxY(self.frame) - minHeight;
+    //        rect.size.height = minHeight;
+    //    }
+    //
+    //    if (self.fixedAspectRatio) {//最后修正
+    //        CGRect constrainedRect = rect;
+    //
+    //        if (CGRectGetWidth(rect) < minWidth) {//如果结果比最小宽度还小，就把宽度改为最小宽度。正确地逻辑是，比最小宽度还小，就不要修改了。
+    //            constrainedRect.size.width = rect.size.height * (minWidth / rect.size.width);
+    //            return self.frame;
+    //        }
+    //
+    //        if (CGRectGetHeight(rect) < minHeight) {
+    //            constrainedRect.size.height = rect.size.width * (minHeight / rect.size.height);
+    //            return self.frame;
+    //        }
+    //
+    //        rect = constrainedRect;
+    //    }
+    CGFloat minWidth = CGRectGetWidth(self.leftEdgeView.bounds) + CGRectGetWidth(self.rightEdgeView.bounds);//获取最小宽度
+    CGFloat minHeight = CGRectGetHeight(self.topEdgeView.bounds) + CGRectGetHeight(self.bottomEdgeView.bounds);//获取最小高度
+    if(CGRectGetHeight(rect)<minHeight || CGRectGetWidth(rect)<minWidth){
+        return self.frame;
     }
     
     return rect;
 }
 
-- (CGRect)constrainedRectWithRectBasisOfWidth:(CGRect)rect aspectRatio:(CGFloat)aspectRatio
-{
+- (CGRect)constrainedRectWithRectBasisOfWidth:(CGRect)rect aspectRatio:(CGFloat)aspectRatio{
     CGFloat width = CGRectGetWidth(rect);
     CGFloat height = CGRectGetHeight(rect);
-    if (width < height) {
-        height = width / self.fixedAspectRatio;
-    } else {
-        height = width * self.fixedAspectRatio;
-    }
+    //    if (width < height) {
+    //        height = width / self.fixedAspectRatio;
+    //    } else {
+    //        height = width * self.fixedAspectRatio;
+    //    }
+    width=height*self.fixedAspectRatio;
     rect.size = CGSizeMake(width, height);
     
     return rect;
 }
-
+//以height为基准，通过fixedAspectRatio计算得出width
 - (CGRect)constrainedRectWithRectBasisOfHeight:(CGRect)rect aspectRatio:(CGFloat)aspectRatio
 {
-    CGFloat width = CGRectGetWidth(rect);
+    CGFloat width = CGRectGetWidth(rect);//以heigh为基准，修改width
     CGFloat height = CGRectGetHeight(rect);
-    if (width < height) {
-        width = height * self.fixedAspectRatio;
-    } else {
-        width = height / self.fixedAspectRatio;
-    }
+    //    if (width < height) {
+    //        width = height * self.fixedAspectRatio;
+    //    } else {
+    //        width = height / self.fixedAspectRatio;
+    //    }
+    width=height*self.fixedAspectRatio;
     rect.size = CGSizeMake(width, height);
     
     return rect;

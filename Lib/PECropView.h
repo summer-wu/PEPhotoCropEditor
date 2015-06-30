@@ -26,6 +26,10 @@
 
 @property (nonatomic) CGFloat rotationAngle;
 
+@property (nonatomic) UIScrollView *scrollView;
+@property (nonatomic) UIImageView *imageView;
+@property (nonatomic) BOOL hadCalcedScale;//未计算过scale，计算过scale后改为YES，用于设置minimumScale
+
 @property (nonatomic, weak, readonly) UIRotationGestureRecognizer *rotationGestureRecognizer;
 
 - (void)resetCropRect;

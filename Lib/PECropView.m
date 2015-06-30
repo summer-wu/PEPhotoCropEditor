@@ -17,9 +17,7 @@ static const CGFloat MarginLeft = 20.0f;
 
 @interface PECropView () <UIScrollViewDelegate, UIGestureRecognizerDelegate, PECropRectViewDelegate>
 
-@property (nonatomic) UIScrollView *scrollView;
 @property (nonatomic) UIView *zoomingView;
-@property (nonatomic) UIImageView *imageView;
 
 @property (nonatomic) PECropRectView *cropRectView;
 @property (nonatomic) UIView *topOverlayView;
@@ -453,6 +451,10 @@ static const CGFloat MarginLeft = 20.0f;
     
     CGFloat scale = MIN(CGRectGetWidth(self.editingRect) / width, CGRectGetHeight(self.editingRect) / height);
     
+    if (_hadCalcedScale==NO) {//锁定最小缩放比例，否则缩小时会出现截图框比图大的情况
+        self.scrollView.minimumZoomScale=scale;
+        _hadCalcedScale=YES;
+    }
     CGFloat scaledWidth = width * scale;
     CGFloat scaledHeight = height * scale;
     CGRect cropRect = CGRectMake((CGRectGetWidth(self.bounds) - scaledWidth) / 2,

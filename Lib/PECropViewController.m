@@ -98,7 +98,11 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
                                                                             style:UIBarButtonItemStyleBordered
                                                                            target:self
                                                                            action:@selector(constrain:)];
-        self.toolbarItems = @[flexibleSpace, constrainButton, flexibleSpace];
+        UIBarButtonItem *rotate90=[[UIBarButtonItem alloc]initWithTitle:@"旋转90度" style:UIBarButtonItemStylePlain target:self action:@selector(rotate90:)];
+        UIBarButtonItem *restore=[[UIBarButtonItem alloc]initWithTitle:@"还原" style:UIBarButtonItemStylePlain target:self action:@selector(restore:)];
+        self.toolbarItems = @[rotate90,flexibleSpace, constrainButton, flexibleSpace,restore];
+
+        self.toolbarItems = @[flexibleSpace,rotate90, flexibleSpace,restore,flexibleSpace];
     }
     self.navigationController.toolbarHidden = self.toolbarHidden;
     
@@ -111,17 +115,18 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
 {
     [super viewDidAppear:animated];
     
-    if (self.cropAspectRatio != 0) {
+    if (self.cropAspectRatio != 0) {//这个时候frame确定了，可以修改选中比例了。
         self.cropAspectRatio = self.cropAspectRatio;
     }
-    if (!CGRectEqualToRect(self.cropRect, CGRectZero)) {
+    if (!CGRectEqualToRect(self.cropRect, CGRectZero)) {//frame都确定了，如果修改了cropRect，在这里需要再修改一次
         self.cropRect = self.cropRect;
     }
-    if (!CGRectEqualToRect(self.imageCropRect, CGRectZero)) {
+    if (!CGRectEqualToRect(self.imageCropRect, CGRectZero)) {//frame都确定了，如果修改了imageCropRect，在这里需要再修改一次
         self.imageCropRect = self.imageCropRect;
     }
     
-    self.keepingCropAspectRatio = self.keepingCropAspectRatio;
+    self.keepingCropAspectRatio = self.keepingCropAspectRatio;//frame都确定了，如果设置了保持纵横比，在这里需要再修改一次
+    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
@@ -285,4 +290,20 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
     }
 }
 
+-(void)rotate90:(id)sender{
+    CGFloat rotation = M_PI_2;
+    CGAffineTransform transform = CGAffineTransformRotate(self.cropView.imageView.transform, rotation);
+    self.cropView.imageView.transform = transform;
+}
+-(void)restore:(id)sender{
+    self.cropView.scrollView.minimumZoomScale=1;
+    self.cropView.scrollView.zoomScale=1;
+    self.cropView.hadCalcedScale=NO;
+    [self resetCropRect];
+    
+    UIImage *image = self.image;
+    CGFloat width = image.size.width;
+    CGFloat height = image.size.height;
+    self.imageCropRect=AVMakeRectWithAspectRatioInsideRect(CGSizeMake(3.0, 2.0), CGRectMake(0, 0, width, height));
+}
 @end

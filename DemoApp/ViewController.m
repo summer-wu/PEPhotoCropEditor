@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "PECropViewController.h"
+#import <AVFoundation/AVFoundation.h>
 
 @interface ViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, PECropViewControllerDelegate>
 
@@ -44,6 +45,7 @@
 {
     [controller dismissViewControllerAnimated:YES completion:NULL];
     self.imageView.image = croppedImage;
+    NSLog(@"%@",croppedImage);
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         [self updateEditButtonEnabled];
     }
@@ -65,15 +67,14 @@
     PECropViewController *controller = [[PECropViewController alloc] init];
     controller.delegate = self;
     controller.image = self.imageView.image;
+    controller.keepingCropAspectRatio=YES;
+    controller.rotationEnabled=NO;
     
     UIImage *image = self.imageView.image;
     CGFloat width = image.size.width;
     CGFloat height = image.size.height;
-    CGFloat length = MIN(width, height);
-    controller.imageCropRect = CGRectMake((width - length) / 2,
-                                          (height - length) / 2,
-                                          length,
-                                          length);
+    controller.imageCropRect=AVMakeRectWithAspectRatioInsideRect(CGSizeMake(3.0, 2.0), CGRectMake(0, 0, width, height));
+
     
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
     
