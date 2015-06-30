@@ -109,3 +109,6 @@ self.cropView.imageCropRect = CGRectMake((width - length) / 2,
 [BSD]: http://opensource.org/licenses/bsd-license.php
 
 PEPhotoCropEditor is available under the [MIT license][MIT]. See the LICENSE file for more info.
+
+##我的修改
+20150701。根据原作者47bd版本进行修改，限制截图框宽高比为3:2。
